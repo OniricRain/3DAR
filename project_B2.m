@@ -8,18 +8,22 @@ clc
 clear all
 close all
 
+% choose dataset
+dataset_name = 'portello'
+% dataset_name = 'tiso'
+% dataset_name = 'castle'
+% dataset_name = 'fountain'
+
+
+
 %% Load the dataset and preprocess the images
 
 % Load all the images to be used in the dataset
-dir_files = 'datasets\portelloDataset';
+dir_files = strcat('data\', dataset_name,'\dataset');
 imds = imageDatastore(dir_files);
 
 % load intrinsic parameters for camera
 load(fullfile(dir_files, 'cameraPar.mat'));
-
-%Define and apply the image order
-% image_order=[ 1 2 3 4 5 6 7 8];
-% imds.Files = imds.Files(image_order);
 
 % Convert the images to grayscale.
 images = cell(1, numel(imds.Files));
@@ -41,6 +45,10 @@ for i = 1:length(images)
         
     % Undistort the first image.
     I = undistortImage(images{i}, cameraParams);
+    
+    % save undistorted grayscale images (will be the COLMAP dataset)
+    image_path = imds.Files{i};
+    saveGrayUndistortedImage(image_path, I, dataset_name)
 
     % Detect keyoints using SURF and extract the descriptors
     keypoints{1,i} = detectSURFFeatures(I, 'NumOctaves', 8);
@@ -49,8 +57,7 @@ for i = 1:length(images)
     % Write the keypoints location, scale and orientation in a .txt file
     % NB: COLMAP only supports 128-D descriptors for now, i.e. the cols
     % column must be 128 (even if i use SURF)
-    image_path = imds.Files{i};
-    writeFeatures(image_path, keypoints{1,i})   
+    writeFeatures(image_path, keypoints{1,i}, dataset_name)   
 end
 
 %% Create .txt files that contain informations about the matching keypoints
@@ -70,7 +77,6 @@ for n = 1:length(images)
         % append in the same .txt file the index pairs
         image_path1 = imds.Files{n};
         image_path2 = imds.Files{m};
-        writeMatchingIndexes(image_path1, image_path2, index_pairs)
+        writeMatchingIndexes(image_path1, image_path2, index_pairs, dataset_name)
     end
-    
 end
