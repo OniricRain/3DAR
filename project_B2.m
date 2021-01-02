@@ -62,8 +62,10 @@ end
 
 %% Create .txt files that contain informations about the matching keypoints
 
-% This matrix contains the number of matching points between every image
+% C contains the number of matching points between every image
 C = zeros(length(images),length(images));
+% this cell contains the matching points indexes between every image
+matchings = cell(length(images),length(images));
 
 for n = 1:length(images)
     for m = setdiff(1:length(images),n) % = for every image different from n
@@ -71,12 +73,33 @@ for n = 1:length(images)
         % match features
         index_pairs = matchFeatures(features{1,n}, features{1,m}, 'MaxRatio', .7, 'Unique',  true);
         
-        % allocate the indices of the coupling points in index_pairs cell
+        % allocate number of coupling features
         C(n,m) = size(index_pairs,1);
         
-        % append in the same .txt file the index pairs
+        % allocate the indices of the coupling points in matching cell
+        matchings{n,m} = index_pairs;
+    end
+end
+%%
+% To fill the .txt file 
+for n = 1:length(images)-1
+    for m = n+1:length(images)
         image_path1 = imds.Files{n};
         image_path2 = imds.Files{m};
-        writeMatchingIndexes(image_path1, image_path2, index_pairs, dataset_name)
+        
+        A = matchings{n,m};
+        B = matchings{m,n}; % I want to put the new couples of indexes of B in A
+        
+        B(:,[1 2]) = B(:,[2 1]); % swap the two columns
+        % save indices of couples in B that are not found in A
+        idx_new_couples = find(~ismember(B,A,'rows')); 
+        % get the new couples by knoing their indices
+        new_couples = B(idx_new_couples,:);
+        
+        % concatenate the two matrices of couples
+        matching_couples = cat(1, A, new_couples);
+        
+        % save in the .txt file
+        writeMatchingIndexes(image_path1, image_path2, matching_couples, dataset_name)   
     end
 end

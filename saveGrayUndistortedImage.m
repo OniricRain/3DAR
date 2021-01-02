@@ -9,7 +9,7 @@
 function [] = saveGrayUndistortedImage(image_path, image, dataset_name)
     [~,name,ext] = fileparts(image_path);
     
-    file_path = strcat('data\', dataset_name,'\undistorted_grayscale_images');
+    file_path = strcat('data\', dataset_name,'\img');
     file_name = strcat(name,ext);
     filespec = fullfile(file_path, file_name);
     imwrite(image, filespec);
