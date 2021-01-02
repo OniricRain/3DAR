@@ -1,18 +1,29 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                         %
+%                     3D AUGMENTED REALITY PROJECT                        %
+%                                                                         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 clc
 clear all
 close all
 
+% choose dataset
+dataset_name = 'portello'
+% dataset_name = 'tiso'
+% dataset_name = 'castle'
+% dataset_name = 'fountain'
+
+
+
+%% Load the dataset and preprocess the images
 
 % Load all the images to be used in the dataset
-dir_files = 'datasets\portelloDataset';
+dir_files = strcat('data\', dataset_name,'\dataset');
 imds = imageDatastore(dir_files);
 
 % load intrinsic parameters for camera
 load(fullfile(dir_files, 'cameraPar.mat'));
-
-%Define and apply the image order
-% image_order=[ 1 2 3 4 5 6 7 8];
-% imds.Files = imds.Files(image_order);
 
 % Convert the images to grayscale.
 images = cell(1, numel(imds.Files));
@@ -21,28 +32,23 @@ for i = 1:numel(imds.Files)
     images{i} = rgb2gray(I);  %store images in the cell array
 end
 
+%% Create .txt files which contain info about the keypoints descriptors
 
-%% 
-keypoints = cell(1, numel(imds.Files));
-features = cell(1, numel(imds.Files));
-%index_pairs = cell(numel(imds.Files),numel(imds.Files));
+keypoints = cell(1, length(images));
+features = cell(1, length(images));
 
-% Undistort the first image.
-I = undistortImage(images{1}, cameraParams); 
 
-% Detect features of the first image. 
-keypoints{1,1} = detectSURFFeatures(I, 'NumOctaves', 8);
-features{1,1} = extractFeatures(I, keypoints{1,1}, 'Upright', true);
-
-% Write the keypoints location, scale and orientation in a .txt file
-image_path = imds.Files{1};
-writeFeatures(image_path, keypoints{1,1})
-
-% repeat for all the other images and perform the matching
-for i = 2:2%numel(images)
+% Compute for all the images the keypoints and the descriptors. By knowing
+% the keypoints it's possible to write the location, scale and orientation
+% information in .txt files (one file for every image)
+for i = 1:length(images)
         
     % Undistort the first image.
     I = undistortImage(images{i}, cameraParams);
+    
+    % save undistorted grayscale images (will be the COLMAP dataset)
+    image_path = imds.Files{i};
+    saveGrayUndistortedImage(image_path, I, dataset_name)
 
     % Detect keyoints using SURF and extract the descriptors
     keypoints{1,i} = detectSURFFeatures(I, 'NumOctaves', 8);
@@ -51,12 +57,49 @@ for i = 2:2%numel(images)
     % Write the keypoints location, scale and orientation in a .txt file
     % NB: COLMAP only supports 128-D descriptors for now, i.e. the cols
     % column must be 128 (even if i use SURF)
-    image_path = imds.Files{i};
-    writeFeatures(image_path, keypoints{1,i})
+    writeFeatures(image_path, keypoints{1,i}, dataset_name)   
+end
 
-    % match features
-    index_pairs = matchFeatures(features{1,i-1}, features{1,i}, 'MaxRatio', .7, 'Unique',  true);
-    % QUESTO è SBAGLIATO
-    % write match indexes
-    
+%% Create .txt files that contain informations about the matching keypoints
+
+% C contains the number of matching points between every image
+C = zeros(length(images),length(images));
+% this cell contains the matching points indexes between every image
+matchings = cell(length(images),length(images));
+
+for n = 1:length(images)
+    for m = setdiff(1:length(images),n) % = for every image different from n
+        
+        % match features
+        index_pairs = matchFeatures(features{1,n}, features{1,m}, 'MaxRatio', .7, 'Unique',  true);
+        
+        % allocate number of coupling features
+        C(n,m) = size(index_pairs,1);
+        
+        % allocate the indices of the coupling points in matching cell
+        matchings{n,m} = index_pairs;
+    end
+end
+%%
+% To fill the .txt file 
+for n = 1:length(images)-1
+    for m = n+1:length(images)
+        image_path1 = imds.Files{n};
+        image_path2 = imds.Files{m};
+        
+        A = matchings{n,m};
+        B = matchings{m,n}; % I want to put the new couples of indexes of B in A
+        
+        B(:,[1 2]) = B(:,[2 1]); % swap the two columns
+        % save indices of couples in B that are not found in A
+        idx_new_couples = find(~ismember(B,A,'rows')); 
+        % get the new couples by knoing their indices
+        new_couples = B(idx_new_couples,:);
+        
+        % concatenate the two matrices of couples
+        matching_couples = cat(1, A, new_couples);
+        
+        % save in the .txt file
+        writeMatchingIndexes(image_path1, image_path2, matching_couples, dataset_name)   
+    end
 end
