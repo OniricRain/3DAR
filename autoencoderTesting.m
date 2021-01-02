@@ -37,7 +37,7 @@ test_set = feat2set(features);
 mse_error_train = zeros(1,128);
 mse_error_test = zeros(1,128);
 tic
-for i = 1:128
+for i = 1:1
 %% training autoencoding
 autoenc = trainAutoencoder(train_set,i,'UseGPU',true);
 encoded_features = encode(autoenc,train_set);
