@@ -103,3 +103,6 @@ for n = 1:length(images)-1
         writeMatchingIndexes(image_path1, image_path2, matching_couples, dataset_name)   
     end
 end
+
+%% Save the features in the current directory
+save(strcat(dataset_name, '_features.mat'), 'features');
