@@ -36,23 +36,27 @@ test_set = feat2set(features);
 
 mse_error_train = zeros(1,128);
 mse_error_test = zeros(1,128);
-tic
-for i = 1:1
-%% training autoencoding
-autoenc = trainAutoencoder(train_set,i,'UseGPU',true);
-encoded_features = encode(autoenc,train_set);
-recon_train = predict(autoenc,train_set);
-mse_error_train(i) = mse(train_set-recon_train);
 
+save('data/train&test.mat','train_set','test_set');
+%% autoencoding
+load('data/train&test.mat')
+layers = [64,32,16,8,4,2,1];
+GPU_bool = true;
 
-%% testing autoencoding
-
-recon_test = predict(autoenc,test_set);
-mse_error_test(i) = mse(test_set-recon_test);
+mse_error_train = zeros(1,length(layers));
+mse_error_test = zeros(1,length(layers));
+for i =1:length(layers)
+    temp_layers = layers(1:i);
+    tic
+    [autoencoder,mse_error_train(i)] = createAutoencoder(train_set,temp_layers,GPU_bool);
+    toc
+    tic
+    [prediction,mse_error_test(i)] = testAutoencoder(test_set,autoencoder);
+    toc
 end
-toc
+
 figure(1);
-plot(1:128,mse_error_test);
+plot(1:length(layers),mse_error_train);
 hold on;
-plot(1:128,mse_error_train);
-legend;
+plot(1:length(layers),mse_error_test);
+legend('train','test');
