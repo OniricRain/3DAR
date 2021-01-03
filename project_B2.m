@@ -43,7 +43,7 @@ features = cell(1, length(images));
 % information in .txt files (one file for every image)
 for i = 1:length(images)
         
-    % Undistort the first image.
+    % Undistort the first image. 
     I = undistortImage(images{i}, cameraParams);
     
     % save undistorted grayscale images (will be the COLMAP dataset)
@@ -52,7 +52,7 @@ for i = 1:length(images)
 
     % Detect keyoints using SURF and extract the descriptors
     keypoints{1,i} = detectSURFFeatures(I, 'NumOctaves', 8);
-    features{1,i} = extractFeatures(I, keypoints{1,i}, 'Upright', true); %try set Upright to false
+    features{1,i} = extractFeatures(I, keypoints{1,i}, 'Upright', false); 
 
     % Write the keypoints location, scale and orientation in a .txt file
     % NB: COLMAP only supports 128-D descriptors for now, i.e. the cols
@@ -105,4 +105,4 @@ for n = 1:length(images)-1
 end
 
 %% Save the features in the current directory
-save(strcat(dataset_name, '_features.mat'), 'features');
+save(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'), 'features');
