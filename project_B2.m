@@ -9,8 +9,8 @@ clear all
 close all
 
 % choose dataset
-dataset_name = 'portello'
-% dataset_name = 'tiso'
+% dataset_name = 'portello'
+dataset_name = 'tiso'
 % dataset_name = 'castle'
 % dataset_name = 'fountain'
 

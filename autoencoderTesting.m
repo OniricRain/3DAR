@@ -15,6 +15,10 @@ dataset_name = 'tiso'
 load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))
 test_set = feat2set(features);
 
+%normalization of the features
+train_set = normalize(train_set);
+test_set = normalize(test_set);
+
 mse_error_train = zeros(1,128);
 mse_error_test = zeros(1,128);
 
