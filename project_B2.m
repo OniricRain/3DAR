@@ -48,7 +48,7 @@ for i = 1:length(images)
     
     % save undistorted grayscale images (will be the COLMAP dataset)
     image_path = imds.Files{i};
-    saveGrayUndistortedImage(image_path, images{i}, dataset_name) % TODO: rename function (togli udistorted)
+    saveGrayImage(image_path, images{i}, dataset_name) % TODO: rename function (togli udistorted)
 
     % Detect keyoints using SURF and extract the descriptors
     keypoints{1,i} = detectSURFFeatures(images{i}, 'NumOctaves', 8);

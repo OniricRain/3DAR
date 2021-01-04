@@ -6,7 +6,7 @@
 %                        dataset is used
 % output: - []: no ouput. The image is saved in a folder that depends on
 %               which dataset is used
-function [] = saveGrayUndistortedImage(image_path, image, dataset_name)
+function [] = saveGrayImage(image_path, image, dataset_name)
     [~,name,ext] = fileparts(image_path);
     
     file_path = strcat('data\', dataset_name,'\img');
