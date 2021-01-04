@@ -9,8 +9,8 @@ clear all
 close all
 
 % choose dataset
-% dataset_name = 'portello'
-dataset_name = 'tiso'
+dataset_name = 'portello'
+% dataset_name = 'tiso'
 % dataset_name = 'castle'
 % dataset_name = 'fountain'
 
@@ -44,15 +44,15 @@ features = cell(1, length(images));
 for i = 1:length(images)
         
     % Undistort the first image. 
-    I = undistortImage(images{i}, cameraParams);
+    %I = undistortImage(images{i}, cameraParams);
     
     % save undistorted grayscale images (will be the COLMAP dataset)
     image_path = imds.Files{i};
-    saveGrayUndistortedImage(image_path, I, dataset_name)
+    saveGrayUndistortedImage(image_path, images{i}, dataset_name) % TODO: rename function (togli udistorted)
 
     % Detect keyoints using SURF and extract the descriptors
-    keypoints{1,i} = detectSURFFeatures(I, 'NumOctaves', 8);
-    features{1,i} = extractFeatures(I, keypoints{1,i}, 'Upright', false); 
+    keypoints{1,i} = detectSURFFeatures(images{i}, 'NumOctaves', 8);
+    features{1,i} = extractFeatures(images{i}, keypoints{1,i}, 'Upright', false); 
 
     % Write the keypoints location, scale and orientation in a .txt file
     % NB: COLMAP only supports 128-D descriptors for now, i.e. the cols
@@ -98,6 +98,8 @@ for n = 1:length(images)-1
         
         % concatenate the two matrices of couples
         matching_couples = cat(1, A, new_couples);
+        % sort indexes
+        matching_couples = sortrows(matching_couples,1);
         
         % save in the .txt file
         writeMatchingIndexes(image_path1, image_path2, matching_couples, dataset_name)   
