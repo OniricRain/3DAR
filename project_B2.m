@@ -9,10 +9,11 @@ clear all
 close all
 
 % choose dataset
-dataset_name = 'portello'
+% dataset_name = 'portello'
 % dataset_name = 'tiso'
 % dataset_name = 'castle'
-% dataset_name = 'fountain'
+dataset_name = 'fountain'
+% dataset_name = 'mini_fountain'
 
 
 
@@ -23,7 +24,7 @@ dir_files = strcat('data\', dataset_name,'\dataset');
 imds = imageDatastore(dir_files);
 
 % load intrinsic parameters for camera
-load(fullfile(dir_files, 'cameraPar.mat'));
+% load(fullfile(dir_files, 'cameraPar.mat'));
 
 % Convert the images to grayscale.
 images = cell(1, numel(imds.Files));
@@ -100,6 +101,7 @@ for n = 1:length(images)-1
         matching_couples = cat(1, A, new_couples);
         % sort indexes
         matching_couples = sortrows(matching_couples,1);
+        matching_couples = matching_couples - 1; %subtract one for starting indexes from zero
         
         % save in the .txt file
         writeMatchingIndexes(image_path1, image_path2, matching_couples, dataset_name)   
