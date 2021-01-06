@@ -4,20 +4,32 @@ clear all
 close all
 
 %% Load the training set and the test set
-%training
+% training set
 dataset_name = 'portello'
 load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))
-train_set = feat2set(features);
+features1 = feat2set(features);
+
+dataset_name = 'castle'
+load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))
+features2 = feat2set(features);
+
+train_set = cat(2,features1,features2);
+
+
+% test set
+dataset_name = 'fountain'
+load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))
+test_set1 = feat2set(features);
 
 dataset_name = 'tiso'
-% dataset_name = 'fountain'
 load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))
-test_set = feat2set(features);
+test_set2 = feat2set(features);
+
 
 %normalization of the features
 train_set = normalize(train_set);
-test_set = normalize(test_set);
-
+test_set1 = normalize(test_set1);
+test_set2 = normalize(test_set2);
 
 %% autoencoding
 N_iteration = [32,16,8,4,2];
