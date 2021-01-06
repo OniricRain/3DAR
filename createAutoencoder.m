@@ -1,4 +1,4 @@
-function [autoencoder,mse_error_train] = createAutoencoder(train_set,layers,GPU_bool)
+function [autoencoder,mse_error_train,prediction_on_train] = createAutoencoder(train_set,layers,GPU_bool)
 %createAutoencoder, function to create and train a multilayer autoencoder
 %input:
 %       -train_set: training data set 
@@ -25,7 +25,7 @@ decoded{end} = decode(autoencoder{end},encoded{end}); %deeper layer decode
 for i = length(layers)-1:-1:1 %from the penultimate layer to the first with pace 1
     decoded{i} = decode(autoencoder{i},decoded{i+1});
 end
-
+prediction_on_train = decoded{1};
 mse_error_train = mse(train_set-decoded{1});
 end
 

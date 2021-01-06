@@ -1,2 +1,4 @@
-**/data
+*.jpg
 *.asv
+*.db
+*.ini
