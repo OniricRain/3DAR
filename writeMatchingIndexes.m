@@ -7,13 +7,12 @@
 %                        dataset is used
 % output: - []: no ouput. The indexes of matching keypoints of every couple
 %               of grayscale undistorted images are written in a .txt file
-function [] = writeMatchingIndexes(image_path1, image_path2, index_pairs, dataset_name)
+function [] = writeMatchingIndexes(image_path1, image_path2, index_pairs, dataset_name, file_name)
 
     [~,name1,ext1] = fileparts(image_path1); %~: filepath is not used
     [~,name2,ext2] = fileparts(image_path2);
     
     file_path = strcat('data\', dataset_name);
-    file_name = 'matches_file.txt';
     filespec = fullfile(file_path, file_name);
     % create a file for writing
     file_Id = fopen(filespec, 'a'); % permission 'a': append data to the end of the file

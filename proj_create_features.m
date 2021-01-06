@@ -104,7 +104,8 @@ for n = 1:length(images)-1
         matching_couples = matching_couples - 1; %subtract one for starting indexes from zero
         
         % save in the .txt file
-        writeMatchingIndexes(image_path1, image_path2, matching_couples, dataset_name)   
+        file_name = 'matches_file.txt'
+        writeMatchingIndexes(image_path1, image_path2, matching_couples, dataset_name, file_name)   
     end
 end
 
