@@ -1,0 +1,48 @@
+Autoencoder type: autoencoder_32.mat
+MSE on training: 0.022749
+MSE on dataset castle: 0.020883
+MSE on dataset portello: 0.027140
+MSE on dataset fountain: 0.023998
+MSE on dataset tiso: 0.024565
+--------------------------------
+
+Autoencoder type: autoencoder_16.mat
+MSE on training: 0.033256
+MSE on dataset castle: 0.030673
+MSE on dataset portello: 0.039334
+MSE on dataset fountain: 0.034151
+MSE on dataset tiso: 0.036543
+--------------------------------
+
+Autoencoder type: autoencoder_8.mat
+MSE on training: 0.071193
+MSE on dataset castle: 0.066110
+MSE on dataset portello: 0.083149
+MSE on dataset fountain: 0.075491
+MSE on dataset tiso: 0.077237
+--------------------------------
+
+Autoencoder type: autoencoder_4.mat
+MSE on training: 0.123037
+MSE on dataset castle: 0.115701
+MSE on dataset portello: 0.140295
+MSE on dataset fountain: 0.135982
+MSE on dataset tiso: 0.135563
+--------------------------------
+
+Autoencoder type: autoencoder_2.mat
+MSE on training: 0.194066
+MSE on dataset castle: 0.184767
+MSE on dataset portello: 0.215944
+MSE on dataset fountain: 0.190159
+MSE on dataset tiso: 0.207407
+--------------------------------
+
+Autoencoder type: autoencoder_1.mat
+MSE on training: 0.240525
+MSE on dataset castle: 0.244242
+MSE on dataset portello: 0.231780
+MSE on dataset fountain: 0.219365
+MSE on dataset tiso: 0.224579
+--------------------------------
+

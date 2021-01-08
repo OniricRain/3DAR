@@ -66,7 +66,5 @@ function [] = reconstructFeaturesWithAutoencoder(dataset_name, imds, features, a
         end
     end
 
-    %% Save the features in the current directory
-    save(strcat('data/', dataset_name,'/', dataset_name, '_features_rec', string(hidden_size),'.mat'), 'features_rec');
 
 end

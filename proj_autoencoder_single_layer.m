@@ -29,6 +29,8 @@ test_set_tiso = feat2set(features);
 
 
 %normalization of the features
+subtrain_set_portello = normalize(features1);
+subtrain_set_castle = normalize(features2);
 train_set = normalize(train_set);
 test_set_fountain = normalize(test_set_fountain);
 test_set_tiso = normalize(test_set_tiso);
@@ -58,7 +60,7 @@ for i =1:length(hidden_size)
     toc
 end
 
-%%
+%% MSE PLOT
 figure(1);
 plot(hidden_size,mse_error_train);
 hold on;
