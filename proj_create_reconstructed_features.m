@@ -15,15 +15,14 @@ imds = imageDatastore(dir_files);
 
 
 
-models = ["autoencoder_2.mat", "autoencoder_16.mat", "autoencoder_8.mat", ...
+models = ["autoencoder_32.mat", "autoencoder_16.mat", "autoencoder_8.mat", ...
           "autoencoder_4.mat", "autoencoder_2.mat", "autoencoder_1.mat"];
 
 % load features
 load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))
 
 for i = 1:length(models)
-    % load autoencoder
-    load (models(i))
+    load (models(i));
     reconstructFeaturesWithAutoencoder(dataset_name, imds, features, autoencoder);
 end
 
