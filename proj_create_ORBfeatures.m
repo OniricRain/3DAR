@@ -11,8 +11,8 @@ close all
 % choose dataset
 % dataset_name = 'portello'
 % dataset_name = 'tiso'
-dataset_name = 'castle'
-% dataset_name = 'fountain'
+% dataset_name = 'castle'
+dataset_name = 'fountain'
 % dataset_name = 'mini_fountain'
 
 
@@ -52,9 +52,7 @@ for i = 1:length(images)
     saveGrayImage(image_path, images{i}, dataset_name) % TODO: rename function (togli udistorted)
 
     % Detect keyoints using SURF and extract the descriptors
-%     keypoints{1,i} = detectSURFFeatures(images{i}, 'NumOctaves', 8);
     keypoints{1,i} = detectORBFeatures(images{i});
-%     features{1,i} = extractFeatures(images{i}, keypoints{1,i}, 'Upright', false); 
     features{1,i} = extractFeatures(images{i}, keypoints{1,i});
     
     % Write the keypoints location, scale and orientation in a .txt file
@@ -122,4 +120,3 @@ end
 
 %% Save the features in the current directory
 save(strcat('data/', dataset_name,'/', dataset_name, '_ORBfeatures.mat'), 'features');
-% save(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'), 'features');
