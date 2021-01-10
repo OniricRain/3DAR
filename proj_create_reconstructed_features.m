@@ -15,8 +15,8 @@ imds = imageDatastore(dir_files);
 
 
 
-models = ["autoencoder_32.mat", "autoencoder_16.mat", "autoencoder_8.mat", ...
-          "autoencoder_4.mat", "autoencoder_2.mat", "autoencoder_1.mat"];
+models = ["autoencoder_32.mat"];%, "autoencoder_16.mat", "autoencoder_8.mat", ...
+%           "autoencoder_4.mat", "autoencoder_2.mat", "autoencoder_1.mat"];
 
 % load features
 load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))

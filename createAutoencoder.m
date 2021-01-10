@@ -22,7 +22,7 @@ end
 
 %decoding
 decoded{end} = decode(autoencoder{end},encoded{end}); %deeper layer decode
-for i = length(layers)-1:-1:1 %from the penultimate layer to the first with pace 1
+for i = length(layers)-1:-1:1 %from the penultimate layer to the first with pace -1
     decoded{i} = decode(autoencoder{i},decoded{i+1});
 end
 prediction_on_train = decoded{1};
