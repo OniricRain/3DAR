@@ -1,11 +1,11 @@
 %% Load the training set and the test set
 % training set
 dataset_name = 'portello'
-load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))
+load(strcat('data/', dataset_name,'/', dataset_name, '_SURFfeatures.mat'))
 features1 = feat2set(features);
 num_features_portello = length(features1);
 dataset_name = 'castle'
-load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))
+load(strcat('data/', dataset_name,'/', dataset_name, '_SURFfeatures.mat'))
 features2 = feat2set(features);
 
 train_set = cat(2,features1,features2);
@@ -13,11 +13,11 @@ train_set = cat(2,features1,features2);
 
 % test set
 dataset_name = 'fountain'
-load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))
+load(strcat('data/', dataset_name,'/', dataset_name, '_SURFfeatures.mat'))
 test_set_fountain = feat2set(features);
 
 dataset_name = 'tiso'
-load(strcat('data/', dataset_name,'/', dataset_name, '_features.mat'))
+load(strcat('data/', dataset_name,'/', dataset_name, '_SURFfeatures.mat'))
 test_set_tiso = feat2set(features);
 
 

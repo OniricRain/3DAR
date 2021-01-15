@@ -1,5 +1,6 @@
-
-function [] = reconstructFeaturesWithAutoencoder(dataset_name, imds, features, autoencoder)
+function [] = reconstructAndMatch(dataset_name, imds, features, autoencoder, method)
+    % reconstructAndMatch: reconstruct the descriptors and proceed with
+    % their matching
     % nuber of neurons in the code layer
     hidden_size = autoencoder{1}.HiddenSize;
     
@@ -34,7 +35,7 @@ function [] = reconstructFeaturesWithAutoencoder(dataset_name, imds, features, a
     end
     
     % delete file with matching idexes, if exist
-    file_name = strcat('matches_file_rec', string(hidden_size),'.txt');
+    file_name = strcat('matches_file_rec_',string(method), string(hidden_size),'.txt');
     file_path = strcat('data\',dataset_name,'\',file_name);
     if exist(file_path, 'file') == 2
        delete(file_path)

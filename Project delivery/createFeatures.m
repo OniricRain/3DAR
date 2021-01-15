@@ -1,22 +1,6 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                                         %
-%                     3D AUGMENTED REALITY PROJECT                        %
-%                                                                         %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-clc
-clear all
-close all
-
-% choose dataset
-% dataset_name = 'portello'
-% dataset_name = 'tiso'
-dataset_name = 'castle'
-% dataset_name = 'fountain'
-% dataset_name = 'mini_fountain'
-
-
-
+function createFeatures(dataset_name,method)
+%createFeatures: extract the features from the dataset_name image using the
+%descriptor indicated in the method field
 %% Load the dataset and preprocess the images
 
 % Load all the images to be used in the dataset
@@ -49,11 +33,17 @@ for i = 1:length(images)
     
     % save undistorted grayscale images (will be the COLMAP dataset)
     image_path = imds.Files{i};
-    saveGrayImage(image_path, images{i}, dataset_name) % TODO: rename function (togli udistorted)
+    saveGrayImage(image_path, images{i}, dataset_name) %
 
-    % Detect keyoints using SURF and extract the descriptors
+    % Detect keyoints using ORB and extract the descriptors
     keypoints{1,i} = detectSURFFeatures(images{i}, 'NumOctaves', 8);
-    features{1,i} = extractFeatures(images{i}, keypoints{1,i}, 'Upright', false); 
+    if(method == "KAZE")
+        features{1,i} = extractFeatures(images{i}, keypoints{1,i},'Method','KAZE');
+    elseif(method == "SURF")
+        features{1,i} = extractFeatures(images{i}, keypoints{1,i}, 'Upright', false); 
+    else
+        disp("No aivalable method selected");
+    end
     
     % Write the keypoints location, scale and orientation in a .txt file
     % NB: COLMAP only supports 128-D descriptors for now, i.e. the cols
@@ -84,8 +74,14 @@ end
 %%
 
 % delete file with matching idexes, if exist
-% file_name = 'matches_file.txt';
-file_name = 'SURFmatches_file.txt';
+if(method == "KAZE")
+    file_name = 'KAZEmatches_file.txt';
+elseif(method == "SURF")
+    file_name = 'SURFmatches_file.txt';
+else
+    disp("No aivalable method selected");
+end
+
 file_path = strcat('data\',dataset_name,'\',file_name);
 if exist(file_path, 'file') == 2
    delete(file_path)
@@ -119,4 +115,13 @@ for n = 1:length(images)-1
 end
 
 %% Save the features in the current directory
-save(strcat('data/', dataset_name,'/', dataset_name, '_SURFfeatures.mat'), 'features');
+if(method == "KAZE")
+    save(strcat('data/', dataset_name,'/', dataset_name, '_KAZEfeatures.mat'), 'features');
+elseif(method == "SURF")
+    save(strcat('data/', dataset_name,'/', dataset_name, '_SURFfeatures.mat'), 'features');
+else
+    disp("No aivalable method selected");
+end
+
+end
+

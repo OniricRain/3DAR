@@ -3,15 +3,17 @@ clc;
 clear all;
 close all;
 %% load Dataset
-loadDataset;
+% loadDataset;
+loadKAZEDataset;
 
 %% MSE computing
-models = ["autoencoder_32.mat","autoencoder_16.mat","autoencoder_8.mat","autoencoder_4.mat","autoencoder_2.mat","autoencoder_1.mat"];
+% models = ["autoencoder_32.mat","autoencoder_16.mat","autoencoder_8.mat","autoencoder_4.mat","autoencoder_2.mat","autoencoder_1.mat"];
 
-% models = ["autoencoder_48_32.mat","autoencoder_32_16.mat","autoencoder_48_32_16.mat"];
+models = ["KAZEautoencoder_32.mat","KAZEautoencoder_16.mat","KAZEautoencoder_8.mat","KAZEautoencoder_4.mat","KAZEautoencoder_2.mat","KAZEautoencoder_1.mat"];
 
-file_Id = fopen('data/mse_single_layer.txt','w');     
-% file_Id = fopen('data/mse_multi_layer.txt','w');     
+% file_Id = fopen('data/mse_single_layer.txt','w');     
+file_Id = fopen('data/mse_single_layerKAZE.txt','w');     
+
 tic
 for i = 1:length(models)
     load(models(i));
